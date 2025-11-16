@@ -11,6 +11,5 @@ public interface ClienteService {
     ClienteDto getUser (Long id);
     ClienteDto updateUser (ClienteDto clienteDto);
     void deleteUser (Long id);
-
     List<ClienteDto> getAllUsers();
 }
