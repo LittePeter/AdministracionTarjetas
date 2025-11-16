@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClienteServiceImp implements ClienteService {
 
@@ -40,4 +42,15 @@ public class ClienteServiceImp implements ClienteService {
     public void deleteUser(Long id) {
         clienteRepo.deleteByIdCliente(id);
     }
+
+    @Override
+    public List<ClienteDto> getAllUsers() {
+        return clienteRepo
+                .findAll()
+                .stream()
+                .map(c -> mapper.map(c, ClienteDto.class))
+                .toList();
+    }
+
+
 }
