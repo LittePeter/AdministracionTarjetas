@@ -22,16 +22,22 @@ public class ClienteServiceImp implements ClienteService {
 
     @Override
     public ClienteDto getUser(Long id) {
-        return null;
+        return mapper.map(clienteRepo.findByIdCliente(id), ClienteDto.class);
     }
 
     @Override
     public ClienteDto updateUser(ClienteDto clienteDto) {
-        return null;
+        ClienteDto clientToUpdate = mapper
+                .map(clienteRepo.findByIdCliente(clienteDto.getIdCliente()), ClienteDto.class);
+        clientToUpdate.setIdCliente(clienteDto.getIdCliente());
+        clientToUpdate.setName(clienteDto.getName());
+        clientToUpdate.setEmail(clienteDto.getEmail());
+        clienteRepo.save(mapper.map(clientToUpdate, Cliente.class));
+        return clientToUpdate;
     }
 
     @Override
     public ClienteDto deleteUser(Long id) {
-        return null;
+
     }
 }
