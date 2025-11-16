@@ -10,7 +10,7 @@ import lombok.Data;
 @Table
 public class Cliente {
     @Id
-    @Column(length=10,nullable=false,unique=true)
+    @Column(length=10,nullable=false,unique = true)
     private Long idCliente;
     @Column
     private String name;
