@@ -1,0 +1,79 @@
+package co.edu.unbosque.admntarjetas.service;
+
+import co.edu.unbosque.admntarjetas.model.dto.ClienteDto;
+import co.edu.unbosque.admntarjetas.model.dto.RegistroDto;
+import co.edu.unbosque.admntarjetas.model.dto.TarjetaDto;
+import co.edu.unbosque.admntarjetas.model.entity.Cliente;
+import co.edu.unbosque.admntarjetas.repo.ClienteRepo;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ClienteServiceImp implements ClienteService {
+
+    @Autowired
+    private ModelMapper mapper;
+    @Autowired
+    ClienteRepo clienteRepo;
+    @Autowired
+    TarjetaService tarjetaService;
+
+    @Override
+    public void createUser(ClienteDto clienteDto) {
+        clienteRepo.save(mapper.map(clienteDto, Cliente.class));
+    }
+
+    @Override
+    public void register(RegistroDto registroDto) {
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(registroDto.getIdCliente());
+        cliente.setName(registroDto.getName());
+        cliente.setEmail(registroDto.getEmail());
+        clienteRepo.save(cliente);
+
+        TarjetaDto tarjeta = TarjetaDto
+                .builder()
+                .numeroTarjeta(registroDto.getNumeroTarjeta())
+                .cupoTotal(registroDto.getCupoTotal())
+                .cupoUsado(registroDto.getCupoUsado())
+                .fechaVencimiento(registroDto.getFechaVencimiento())
+                .idCliente(cliente.getIdCliente())
+                .build();
+        tarjetaService.createTarjeta(tarjeta);
+    }
+
+    @Override
+    public ClienteDto getUser(Long id) {
+        return mapper.map(clienteRepo.findByIdCliente(id), ClienteDto.class);
+    }
+
+    @Override
+    public ClienteDto updateUser(ClienteDto clienteDto) {
+        ClienteDto clientToUpdate = mapper
+                .map(clienteRepo.findByIdCliente(clienteDto.getIdCliente()), ClienteDto.class);
+        clientToUpdate.setIdCliente(clienteDto.getIdCliente());
+        clientToUpdate.setName(clienteDto.getName());
+        clientToUpdate.setEmail(clienteDto.getEmail());
+        clienteRepo.save(mapper.map(clientToUpdate, Cliente.class));
+        return clientToUpdate;
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        clienteRepo.deleteByIdCliente(id);
+    }
+
+    @Override
+    public List<ClienteDto> getAllUsers() {
+        return clienteRepo
+                .findAll()
+                .stream()
+                .map(c -> mapper.map(c, ClienteDto.class))
+                .toList();
+    }
+
+
+}
