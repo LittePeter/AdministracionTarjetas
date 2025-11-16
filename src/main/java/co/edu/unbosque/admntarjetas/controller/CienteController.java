@@ -1,6 +1,7 @@
 package co.edu.unbosque.admntarjetas.controller;
 
 import co.edu.unbosque.admntarjetas.model.dto.ClienteDto;
+import co.edu.unbosque.admntarjetas.model.dto.RegistroDto;
 import co.edu.unbosque.admntarjetas.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,12 @@ public class CienteController {
     public ResponseEntity<ClienteDto> createUser(@RequestBody ClienteDto clienteDto) {
         clienteService.createUser(clienteDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteDto);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<RegistroDto> create(@RequestBody RegistroDto registroDto) {
+        clienteService.register(registroDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registroDto);
     }
 
     @PutMapping
