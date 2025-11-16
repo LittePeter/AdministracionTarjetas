@@ -37,7 +37,7 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     @Override
-    public ClienteDto deleteUser(Long id) {
-
+    public void deleteUser(Long id) {
+        clienteRepo.deleteByIdCliente(id);
     }
 }
