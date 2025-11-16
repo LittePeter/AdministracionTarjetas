@@ -2,9 +2,13 @@ package co.edu.unbosque.admntarjetas.model.dto;
 
 import co.edu.unbosque.admntarjetas.model.entity.ESTADOTARJETA;
 import co.edu.unbosque.admntarjetas.model.entity.FRANQUICIA;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegistroDto {
 
     //Información del Cliente

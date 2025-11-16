@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface TarjetaService {
     void createTarjeta(TarjetaDto tarjeta);
-    TarjetaDto updateTarjeta(TarjetaDto tarjeta, Long idCliente);
+    TarjetaDto updateTarjeta(TarjetaDto tarjeta);
     void deleteTarjeta(Long numeroTarjeta);
     TarjetaDto getTarjetaDto(TarjetaDto tarjeta);
-    List<TarjetaDto> listarTarjetas();
+    List<TarjetaDto> listarTarjetas(Long idCliente);
 }
