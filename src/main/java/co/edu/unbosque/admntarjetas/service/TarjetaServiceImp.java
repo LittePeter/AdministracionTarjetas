@@ -1,7 +1,7 @@
 package co.edu.unbosque.admntarjetas.service;
 
-import co.edu.unbosque.admntarjetas.model.Exception.TarjetaNoAdminitaException;
-import co.edu.unbosque.admntarjetas.model.Exception.TarjetaNotFoundException;
+import co.edu.unbosque.admntarjetas.exception.TarjetaNoAdmitidaException;
+import co.edu.unbosque.admntarjetas.exception.TarjetaNotFoundException;
 import co.edu.unbosque.admntarjetas.model.dto.TarjetaDto;
 import co.edu.unbosque.admntarjetas.model.entity.ESTADOTARJETA;
 import co.edu.unbosque.admntarjetas.model.entity.FRANQUICIA;
@@ -24,7 +24,7 @@ public class TarjetaServiceImp implements TarjetaService {
     @Override
     public void createTarjeta(TarjetaDto tarjeta) {
         if(tarjetaRepo.existsByNumeroTarjeta(tarjeta.getNumeroTarjeta())){
-            throw new TarjetaNoAdminitaException("Esta tarjeta ya existe");
+            throw new TarjetaNoAdmitidaException("Esta tarjeta ya existe");
         }
         tarjeta.setEstadoTarjeta(ESTADOTARJETA.ACTIVO);
         tarjeta.setCupoTotal(tarjeta.getCupoTotal());
@@ -33,7 +33,7 @@ public class TarjetaServiceImp implements TarjetaService {
         tarjeta.setCupoDisponible(tarjeta.getCupoTotal() - tarjeta.getCupoUsado());
         tarjeta.setFranquicia(franquicia(String.valueOf(tarjeta.getNumeroTarjeta())));
         if (tarjeta.getFranquicia() == null) {
-            throw  new TarjetaNoAdminitaException("Tarjeta no adminita");
+            throw  new TarjetaNoAdmitidaException("Tarjeta no adminita");
         }
         System.out.println(tarjeta.getFranquicia());
         tarjetaRepo.save(mapper.map(tarjeta, Tarjeta.class));
