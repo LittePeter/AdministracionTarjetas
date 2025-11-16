@@ -1,5 +1,6 @@
 package co.edu.unbosque.admntarjetas.repo;
 
+import co.edu.unbosque.admntarjetas.model.dto.TarjetaDto;
 import co.edu.unbosque.admntarjetas.model.entity.Tarjeta;
 import org.springframework.data.jpa.repository.JpaRepository;
 

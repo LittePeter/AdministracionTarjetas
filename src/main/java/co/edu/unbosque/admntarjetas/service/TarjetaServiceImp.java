@@ -3,9 +3,11 @@ package co.edu.unbosque.admntarjetas.service;
 import co.edu.unbosque.admntarjetas.exception.TarjetaNoAdmitidaException;
 import co.edu.unbosque.admntarjetas.exception.TarjetaNotFoundException;
 import co.edu.unbosque.admntarjetas.model.dto.TarjetaDto;
+import co.edu.unbosque.admntarjetas.model.entity.Cliente;
 import co.edu.unbosque.admntarjetas.model.entity.ESTADOTARJETA;
 import co.edu.unbosque.admntarjetas.model.entity.FRANQUICIA;
 import co.edu.unbosque.admntarjetas.model.entity.Tarjeta;
+import co.edu.unbosque.admntarjetas.repo.ClienteRepo;
 import co.edu.unbosque.admntarjetas.repo.TarjetaRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +22,32 @@ public class TarjetaServiceImp implements TarjetaService {
     private TarjetaRepo tarjetaRepo;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private ClienteRepo clienteRepo;
 
     @Override
-    public void createTarjeta(TarjetaDto tarjeta) {
-        if(tarjetaRepo.existsByNumeroTarjeta(tarjeta.getNumeroTarjeta())){
-            throw new TarjetaNoAdmitidaException("Esta tarjeta ya existe");
+    public void createTarjeta(TarjetaDto tarjetaDto) {
+        if(tarjetaRepo.existsByNumeroTarjeta(tarjetaDto.getNumeroTarjeta())){
+            throw new TarjetaNoAdmitidaException("Esta tarjetaDto ya existe");
         }
-        tarjeta.setEstadoTarjeta(ESTADOTARJETA.ACTIVO);
-        tarjeta.setCupoTotal(tarjeta.getCupoTotal());
-        tarjeta.setCupoDisponible(tarjeta.getCupoTotal() - tarjeta.getCupoUsado());
-        tarjeta.setCupoUsado(tarjeta.getCupoUsado());
-        tarjeta.setCupoDisponible(tarjeta.getCupoTotal() - tarjeta.getCupoUsado());
-        tarjeta.setFranquicia(franquicia(String.valueOf(tarjeta.getNumeroTarjeta())));
-        if (tarjeta.getFranquicia() == null) {
+        tarjetaDto.setEstadoTarjeta(ESTADOTARJETA.ACTIVO);
+        tarjetaDto.setCupoTotal(tarjetaDto.getCupoTotal());
+        tarjetaDto.setCupoDisponible(tarjetaDto.getCupoTotal() - tarjetaDto.getCupoUsado());
+        tarjetaDto.setCupoUsado(tarjetaDto.getCupoUsado());
+        tarjetaDto.setCupoDisponible(tarjetaDto.getCupoTotal() - tarjetaDto.getCupoUsado());
+        tarjetaDto.setFranquicia(franquicia(String.valueOf(tarjetaDto.getNumeroTarjeta())));
+        if (tarjetaDto.getFranquicia() == null) {
             throw  new TarjetaNoAdmitidaException("Tarjeta no adminita");
         }
-        System.out.println(tarjeta.getFranquicia());
-        tarjetaRepo.save(mapper.map(tarjeta, Tarjeta.class));
+        Tarjeta tarjetaNueva = mapper.map(tarjetaDto, Tarjeta.class);
+        tarjetaRepo.save((tarjetaNueva));
     }
 
     @Override
-    public TarjetaDto updateTarjeta(TarjetaDto tarjeta, Long idCliente) {
-        TarjetaDto tarjetaToUpdate = mapper.map(tarjetaRepo.findByCliente_IdCliente(idCliente), TarjetaDto.class);
-        tarjetaToUpdate.setIdCliente(idCliente);
+    public TarjetaDto updateTarjeta(TarjetaDto tarjeta) {
+        TarjetaDto tarjetaToUpdate
+                = mapper.map(tarjetaRepo.findByCliente_IdCliente(tarjeta.getIdCliente()), TarjetaDto.class);
+        tarjetaToUpdate.setIdCliente(tarjeta.getIdCliente());
         tarjetaToUpdate.setCupoTotal(tarjeta.getCupoTotal());
         tarjetaRepo.save(mapper.map(tarjetaToUpdate, Tarjeta.class));
         return tarjetaToUpdate;
@@ -58,12 +63,16 @@ public class TarjetaServiceImp implements TarjetaService {
 
     @Override
     public TarjetaDto getTarjetaDto(TarjetaDto tarjeta) {
+
         return null;
     }
 
     @Override
-    public List<TarjetaDto> listarTarjetas() {
-        return List.of();
+    public List<TarjetaDto> listarTarjetas(Long idCliente) {
+        return tarjetaRepo
+                .findByCliente_IdCliente(idCliente)
+                .stream()
+                .map(t -> mapper.map(t,TarjetaDto.class)).toList();
     }
 
     private FRANQUICIA franquicia(String numeroTarjeta) {
