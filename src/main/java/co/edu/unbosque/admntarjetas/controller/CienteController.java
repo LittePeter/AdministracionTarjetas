@@ -24,8 +24,7 @@ public class CienteController {
 
     @PutMapping
     public ResponseEntity<ClienteDto> updateUser(@RequestBody ClienteDto clienteDto) {
-        clienteService.updateUser(clienteDto);
-        return ResponseEntity.ok().body(clienteDto);
+        return ResponseEntity.ok().body(clienteService.updateUser(clienteDto));
     }
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDto> getUser(@PathVariable Long id) {
