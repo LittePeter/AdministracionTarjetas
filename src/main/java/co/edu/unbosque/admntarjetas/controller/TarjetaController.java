@@ -20,13 +20,19 @@ public class TarjetaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(tarjetaDto);
     }
 
-    @PutMapping
-    ResponseEntity <TarjetaDto> updateTarjeta(@RequestBody TarjetaDto tarjetaDto) {
+    @PutMapping("/update/{numeroTarjeta}")
+    ResponseEntity <TarjetaDto> updateTarjeta(@PathVariable long numeroTarjeta, @RequestBody TarjetaDto tarjetaDto) {
+        tarjetaDto.setNumeroTarjeta(numeroTarjeta);
         return ResponseEntity.ok().body(tarjetaService.updateTarjeta(tarjetaDto));
     }
 
     @GetMapping("/{idCliente}")
-    ResponseEntity <List<TarjetaDto>> updateTarjeta(@PathVariable long idCliente) {
+    ResponseEntity <List<TarjetaDto>> getTarjetas(@PathVariable long idCliente) {
         return ResponseEntity.ok().body(tarjetaService.listarTarjetas(idCliente));
+    }
+    @DeleteMapping("/{idTarjeta}")
+    public ResponseEntity<Void> deleteTarjeta(@PathVariable long idTarjeta) {
+        tarjetaService.deleteTarjeta(idTarjeta);
+        return ResponseEntity.noContent().build();
     }
 }

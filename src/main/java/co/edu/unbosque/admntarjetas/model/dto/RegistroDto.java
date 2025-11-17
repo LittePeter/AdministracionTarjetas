@@ -18,8 +18,6 @@ public class RegistroDto {
     //Información de la trjeta
     private Long numeroTarjeta;
     private String fechaVencimiento;
-    private FRANQUICIA franquicia;
-    private ESTADOTARJETA estadoTarjeta;
     private Double cupoTotal;
     private Double cupoUsado;
 }

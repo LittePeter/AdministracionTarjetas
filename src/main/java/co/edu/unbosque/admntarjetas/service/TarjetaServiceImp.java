@@ -45,9 +45,9 @@ public class TarjetaServiceImp implements TarjetaService {
 
     @Override
     public TarjetaDto updateTarjeta(TarjetaDto tarjeta) {
+
         TarjetaDto tarjetaToUpdate
-                = mapper.map(tarjetaRepo.findByCliente_IdCliente(tarjeta.getIdCliente()), TarjetaDto.class);
-        tarjetaToUpdate.setIdCliente(tarjeta.getIdCliente());
+                = mapper.map(tarjetaRepo.findByNumeroTarjeta(tarjeta.getNumeroTarjeta()), TarjetaDto.class);
         tarjetaToUpdate.setCupoTotal(tarjeta.getCupoTotal());
         tarjetaRepo.save(mapper.map(tarjetaToUpdate, Tarjeta.class));
         return tarjetaToUpdate;
